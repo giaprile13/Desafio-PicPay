@@ -30,7 +30,7 @@ public class TransactionService {
 
         userService.validateTransaction(sender, transactionDTO.value());
 
-        boolean isAuthorized = this.authorizeTransaction(sender, transactionDTO.value());
+        boolean isAuthorized = this.authorizeTransaction();
         if(!isAuthorized) {
             throw new Exception("Transacao nao autorizada");
         }
@@ -53,7 +53,7 @@ public class TransactionService {
         return transaction;
     }
 
-    public boolean authorizeTransaction(User sender, BigDecimal value){
+    public boolean authorizeTransaction(){
         ResponseEntity<Map> authResponse = restTemplate.getForEntity("https://util.devi.tools/api/v2/authorize", Map.class);
         if(authResponse.getStatusCode().is2xxSuccessful()){
             String message = (String) authResponse.getBody().get("message");
